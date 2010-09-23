@@ -1,5 +1,9 @@
 PPM to USB-Joystick-Adapter
 ===========================
 
-http://thomaspfeifer.net/ppm2usb_adapter.htm
+PPM2USB is a simple circuit which decodes a PPM-Signal from a RC 
+(Radio Control) transmitter and emulates a USB-Joystick. It uses
+a Atmel ATMega8 microcontroller. The USB-Interface is implemented
+in software with V-USB.
 
+http://thomaspfeifer.net/ppm2usb_adapter.htm
