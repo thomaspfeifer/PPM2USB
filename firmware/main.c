@@ -114,8 +114,6 @@ int main(void) {
     }
     usbDeviceConnect();
 
-    TCCR1B=(1<<ICES1)|(1<<CS10); // TClk=CPUClk (no prescaler), ICP on rising edge
-    TIMSK=(1<<TICIE1)|(1<<TOIE1); //Overflow and ICP-Interrupt enable
     sei();
     DBG1(0x01, 0, 0);  /* debug output: main loop starts */
 

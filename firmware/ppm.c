@@ -25,6 +25,8 @@
 #include <avr/interrupt.h>
 #include "ppm.h"
 
+#define PPM_TCNT TCNT1
+
 #define CHANNELS (8)
 volatile unsigned int ppm[CHANNELS];
 volatile char chan=-1;
@@ -34,8 +36,8 @@ SIGNAL (SIG_OVERFLOW1) {
 }
 
 SIGNAL (SIG_INPUT_CAPTURE1) {
-  unsigned int timer=TCNT1;
-  TCNT1=0;
+  unsigned int timer=PPM_TCNT;
+  PPM_TCNT=0;
   if (chan>=0 && chan<CHANNELS) {
     ppm[chan]=timer;
   }
@@ -44,8 +46,15 @@ SIGNAL (SIG_INPUT_CAPTURE1) {
 
 
 void ppmInit() {
+#ifdef TIMSK
+  // tested with ATMega8
   TCCR1B=(1<<ICES1)|(1<<CS10); // TClk=CPUClk (no prescaler), ICP on rising edge
   TIMSK=(1<<TICIE1)|(1<<TOIE1); //Overflow and ICP-Interrupt enable
+#else
+  // for ATMega48/ATMega88/ATMega168
+  TCCR1B=(1<<ICES1)|(1<<CS10); // TClk=CPUClk (no prescaler), ICP on rising edge
+  TIMSK1=(1<<ICIE1)|(1<<TOIE1); //Overflow and ICP-Interrupt enable
+#endif
 }
 
 unsigned char ppmGet(int n) {
