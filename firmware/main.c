@@ -118,28 +118,30 @@ int main(void) {
     DBG1(0x01, 0, 0);  /* debug output: main loop starts */
 
     uchar changed=0;
+    ppmNewData=1;
     for(;;){ /* main event loop */
         DBG1(0x02, 0, 0);  /* debug output: main loop iterates */
         wdt_reset();
         usbPoll();
 
-        for (i=0;i<sizeof(reportBuffer);i++) {
-            unsigned char val=ppmGet(i);
-            if (reportBuffer[i]!=val) {
-                reportBuffer[i]=val;
-                changed=1;
+        if (ppmNewData) {
+            ppmNewData=0;
+            for (i=0;i<sizeof(reportBuffer);i++) {
+                unsigned char val=ppmGet(i);
+                if (reportBuffer[i]!=val) {
+                    reportBuffer[i]=val;
+                    changed=1;
+                }
+            }
+            if (changed) {
+                if(usbInterruptIsReady()){
+                    changed=0;
+                    // called after every poll of the interrupt endpoint
+                    DBG1(0x03, 0, 0);  // debug output: interrupt report prepared
+                    usbSetInterrupt((void *)&reportBuffer, sizeof(reportBuffer));
+                }
+
             }
         }
-        if (changed) {
-            if(usbInterruptIsReady()){
-                changed=0;
-                // called after every poll of the interrupt endpoint
-                DBG1(0x03, 0, 0);  // debug output: interrupt report prepared
-                usbSetInterrupt((void *)&reportBuffer, sizeof(reportBuffer));
-                _delay_ms(10);
-            }
-
-        }
-
     }
 }

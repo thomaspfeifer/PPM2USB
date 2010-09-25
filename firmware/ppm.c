@@ -31,7 +31,12 @@
 volatile unsigned int ppm[CHANNELS];
 volatile char chan=-1;
 
+volatile char ppmNewData;
+
 SIGNAL (SIG_OVERFLOW1) {
+  if (chan!=-1) {
+    ppmNewData=1;
+  }
   chan=-1;
 }
 
@@ -55,6 +60,7 @@ void ppmInit() {
   TCCR1B=(1<<ICES1)|(1<<CS10); // TClk=CPUClk (no prescaler), ICP on rising edge
   TIMSK1=(1<<ICIE1)|(1<<TOIE1); //Overflow and ICP-Interrupt enable
 #endif
+  ppmNewData=0;
 }
 
 unsigned char ppmGet(int n) {
