@@ -64,6 +64,7 @@ SIGNAL (SIG_INPUT_CAPTURE1) {
     ppm[chan]=time;
   }
   chan++;
+  PORTC^=(1<<1); // Toogle green LED
 }
 
 /**
@@ -81,7 +82,8 @@ void ppmInit() {
   TCCR1B=(1<<CS10); // TClk=CPUClk (no prescaler)
   TCCR1B|=(1<<ICNC1); // enable input noise chanceler
   TCCR1B|=(1<<ICES1); // positive edge (comment out for inverted signals)
-  //ACSR|=(1<<ACIC); // use analog comparator instead of icp-pin
+  ACSR|=(1<<ACIC); // use analog comparator instead of icp-pin
+  ACSR|=(1<<ACBG); // Analog Comparator Bandgap Select (1.23V)
   TIMSK=(1<<TICIE1)|(1<<OCIE1A); // ICP-Interrupt and Output Compare A Match enable
 
   ppmNewData=0;

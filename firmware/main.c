@@ -113,6 +113,8 @@ int main(void) {
         _delay_ms(1);
     }
     usbDeviceConnect();
+	
+	DDRC|=3; // LEDs: Output
 
     sei();
     DBG1(0x01, 0, 0);  /* debug output: main loop starts */
