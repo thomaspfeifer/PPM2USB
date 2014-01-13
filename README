@@ -6,4 +6,14 @@ PPM2USB is a simple circuit which decodes a PPM-Signal from a RC
 a Atmel ATMega8 microcontroller. The USB-Interface is implemented
 in software with V-USB.
 
+PPM2USB-Description:
 http://thomaspfeifer.net/ppm2usb_adapter.htm
+http://thomaspfeifer.net/ppm2usb_adapter_en.htm
+
+PPM2USB with USBASP-Hardware (feature/USBASP-Branch):
+http://thomaspfeifer.net/usbasp_to_ppm2usb_mod.htm
+http://thomaspfeifer.net/usbasp_to_ppm2usb_mod_en.htm
+
+
+
+
